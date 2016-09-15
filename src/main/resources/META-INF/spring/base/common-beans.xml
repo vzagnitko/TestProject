@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+     http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+    <bean id="executorService" class="java.util.concurrent.Executors"
+          factory-method="newSingleThreadExecutor"
+          destroy-method="shutdownNow"/>
+
+    <bean class="com.google.common.eventbus.AsyncEventBus">
+        <constructor-arg name="executor" ref="executorService" index="0" type="java.util.concurrent.Executor"/>
+    </bean>
+
+    <bean class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+    <bean class="org.springframework.web.client.RestTemplate"/>
+
+    <bean class="java.text.SimpleDateFormat">
+        <constructor-arg name="pattern" type="java.lang.String">
+            <util:constant static-field="ua.test.domains.Pattern.DATE_FORMAT_PATTERN"/>
+        </constructor-arg>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:/META-INF/spring/base/app-main.properties</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

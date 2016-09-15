@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Base config -->
+    <import resource="classpath:/META-INF/spring/base/base-config.xml"/>
+
+    <!-- Commons beans -->
+    <import resource="classpath:/META-INF/spring/base/common-beans.xml"/>
+
+    <!-- MVC config -->
+    <import resource="classpath:/META-INF/spring/mvc/mvc-context.xml"/>
+
+</beans>
