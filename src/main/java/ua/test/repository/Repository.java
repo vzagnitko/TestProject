@@ -4,6 +4,7 @@ import ua.test.exceptions.RepositoryException;
 import ua.test.wrapper.ProcessWrapper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public interface Repository {
      * @return response object which will be backuped
      * @throws RepositoryException if cannot backup a data
      */
+    @Nullable
     <T> T retrieveBackupObject(@Nonnull ProcessWrapper processWrapper, @Nonnull Class<T> clazz) throws RepositoryException;
 
     /**

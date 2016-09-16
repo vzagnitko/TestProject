@@ -5,6 +5,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ua.test.exceptions.BusinessLogicException;
 import ua.test.exceptions.RepositoryException;
@@ -40,6 +42,7 @@ public class FileBackupServiceImpl implements FileBackupService {
      * @throws BusinessLogicException if cannot save a file
      */
     @Override
+    @CacheEvict(value = "backupCache")
     public String backupData() throws BusinessLogicException {
         String backupId = RandomStringUtils.randomAlphanumeric(ID_LONG);
         try {
@@ -58,6 +61,7 @@ public class FileBackupServiceImpl implements FileBackupService {
      * @return list of backupping result
      */
     @Override
+    @Cacheable(value = "backupCache")
     public List<ProcessWrapper> collectBackupResult() throws BusinessLogicException {
         try {
             return fileRepository.retrieveBackupResults();

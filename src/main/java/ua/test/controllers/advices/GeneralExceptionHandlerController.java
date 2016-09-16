@@ -13,7 +13,9 @@ import ua.test.exceptions.RestException;
 import ua.test.wrapper.ErrorResponseWrapper;
 
 /**
- * @author Victor Zagnitko on 10.10.2014.
+ * This is exception handler
+ *
+ * @author victorzagnitko
  */
 @RestController
 @ControllerAdvice
@@ -36,7 +38,7 @@ public class GeneralExceptionHandlerController {
     }
 
     /**
-     * Except RestException
+     * Except HttpRequestException
      *
      * @param exc object which contains exceptions information
      * @return response of error
@@ -74,4 +76,5 @@ public class GeneralExceptionHandlerController {
         return new ResponseEntity<>(new ErrorResponseWrapper(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 exc.getMessage()), null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

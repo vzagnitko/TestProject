@@ -10,7 +10,7 @@ import java.io.File;
  *
  * @author vzagnitko
  */
-public interface CsvService {
+public interface ExportService {
 
     /**
      * Create a CSV report

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.test.exceptions.BusinessLogicException;
 import ua.test.exceptions.RestException;
 import ua.test.services.backup.file.FileBackupService;
-import ua.test.services.csv.CsvService;
+import ua.test.services.csv.ExportService;
 import ua.test.util.string.StringUtils;
 import ua.test.wrapper.ProcessWrapper;
 
@@ -33,7 +33,7 @@ public class RestServiceImpl {
     private FileBackupService fileBackupService;
 
     @Autowired
-    private CsvService csvService;
+    private ExportService csvService;
 
     /**
      * This method is backupped data from file repository

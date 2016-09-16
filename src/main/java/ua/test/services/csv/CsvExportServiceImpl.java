@@ -27,9 +27,9 @@ import java.util.List;
  * @author vzagnitko
  */
 @Service
-public class CsvServiceImpl implements CsvService {
+public class CsvExportServiceImpl implements ExportService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CsvServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExportService.class);
 
     private static final String TEMP_DIRECTORY_PATH = OperationSystem.getTempPath();
 

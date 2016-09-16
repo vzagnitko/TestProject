@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.test.domains.User;
 import ua.test.exceptions.BusinessLogicException;
+import ua.test.exceptions.RepositoryException;
 import ua.test.repository.file.FileRepository;
 import ua.test.services.backup.file.Status;
+import ua.test.wrapper.FailProcessWrapper;
 import ua.test.wrapper.ProcessWrapper;
 import ua.test.wrapper.SuccessProcessWrapper;
 
@@ -39,6 +41,12 @@ public class FileBackupSubscriber {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * Async event to backup data
+     *
+     * @param fileBackupReceiver contains information to backup
+     * @throws BusinessLogicException if cannot backup a data
+     */
     @Subscribe
     @AllowConcurrentEvents
     public void fileBackupEvent(FileBackupData fileBackupReceiver) throws BusinessLogicException {
@@ -48,7 +56,10 @@ public class FileBackupSubscriber {
 
             fileRepository.saveBackupObject(processWrapper);
             List<?> response = fileRepository.retrieveBackupObject(processWrapper, List.class);
-
+            if (response == null) {
+                fileRepository.saveBackupObject(new FailProcessWrapper(processWrapper));
+                throw new RepositoryException("Cannot retrieve object to backup!");
+            }
             List<User> users = Lists.newArrayList();
             for (Object ob : response) {
                 User user = objectMapper.convertValue(ob, User.class);

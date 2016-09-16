@@ -11,17 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import ua.test.common.Links;
 import ua.test.exceptions.RepositoryException;
 import ua.test.repository.AbstractRepository;
 import ua.test.util.file.FileUtils;
 import ua.test.util.file.OperationSystem;
 import ua.test.util.string.StringUtils;
-import ua.test.wrapper.FailProcessWrapper;
 import ua.test.wrapper.ProcessWrapper;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author victorzagnitko on 15.09.16.
  */
-@Service
+@Repository
 public class FileRepositoryImpl extends AbstractRepository implements FileRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileRepositoryImpl.class);
@@ -59,6 +59,7 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
      * @throws RepositoryException if cannot backup a data
      */
     @Override
+    @Nullable
     public <T> T retrieveBackupObject(@Nonnull ProcessWrapper processWrapper,
                                       @Nonnull Class<T> clazz) throws RepositoryException {
         try {
@@ -76,10 +77,6 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
                 } catch (Exception exc) {
                     LOG.error("Cannot take a valid response {}", exc);
                 }
-            }
-            if (object == null) {
-                saveBackupObject(new FailProcessWrapper(processWrapper));
-                throw new RepositoryException("Cannot retrieve object to backup!");
             }
             return object;
         } catch (Exception exc) {
@@ -101,20 +98,7 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
             for (String path : searchBackupReport()) {
                 String json = FileUtils.fastReadFile(path);
                 ProcessWrapper report = objectMapper.readValue(json, ProcessWrapper.class);
-                switch (report.getStatus()) {
-                    case OK: {
-                        LOG.info("File {} is OK", FilenameUtils.getName(path));
-                        break;
-                    }
-                    case IN_PROGRESS: {
-                        LOG.warn("File {} is IN_PROGRESS", FilenameUtils.getName(path));
-                        break;
-                    }
-                    case FAILED: {
-                        LOG.warn("File {} is FAILED", FilenameUtils.getName(path));
-                        break;
-                    }
-                }
+                LOG.info("File {} is {}", FilenameUtils.getName(path), report.getStatus().name());
                 reports.add(report);
             }
         } catch (Exception exc) {
