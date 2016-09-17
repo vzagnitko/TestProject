@@ -96,7 +96,7 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
         List<ProcessWrapper> reports = Lists.newArrayList();
         try {
             for (String path : searchBackupReport()) {
-                String json = FileUtils.fastReadFile(path);
+                String json = IOUtils.toString(FileUtils.fastReadFile(path), Charset.defaultCharset());
                 ProcessWrapper report = objectMapper.readValue(json, ProcessWrapper.class);
                 LOG.info("File {} is {}", FilenameUtils.getName(path), report.getStatus().name());
                 reports.add(report);

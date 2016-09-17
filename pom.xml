@@ -169,8 +169,9 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>${maven-resources-plugin-version}</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -194,7 +195,7 @@
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
+                <version>${tomcat7-maven-plugin-version}</version>
                 <executions>
                     <execution>
                         <id>tomcat-run</id>
@@ -311,14 +312,15 @@
         <commons-csv-version>1.4</commons-csv-version>
         <springfox-swagger-version>2.5.0</springfox-swagger-version>
         <ehcache-version>2.10.2.2.21</ehcache-version>
-        <!--<ehcache-spring-annotations-version>1.2.0</ehcache-spring-annotations-version>-->
         <!-- Plugins version -->
+        <maven-resources-plugin>3.0.1</maven-resources-plugin>
         <maven-dependency-plugin-version>2.10</maven-dependency-plugin-version>
         <maven-compiler-plugin-version>3.5.1</maven-compiler-plugin-version>
         <maven-jar-plugin-version>3.0.2</maven-jar-plugin-version>
         <maven-resources-plugin-version>3.0.1</maven-resources-plugin-version>
         <maven-war-plugin-version>2.6</maven-war-plugin-version>
         <maven-jetty-plugin-version>6.1.26</maven-jetty-plugin-version>
+        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
     </properties>
 
 </project>
