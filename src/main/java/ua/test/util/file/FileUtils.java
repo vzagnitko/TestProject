@@ -51,25 +51,4 @@ public class FileUtils {
         }
     }
 
-//    /**
-//     * Fast save file
-//     *
-//     * @param path to save a file
-//     * @param body to save
-//     * @throws IOException if cannot save a file
-//     */
-//    public static void fastSaveFile(@Nonnull String path, @Nonnull String body) throws IOException {
-//        if (Strings.isNullOrEmpty(path)) {
-//            throw new IllegalArgumentException("Path to file is incorrect!");
-//        }
-//        if (Strings.isNullOrEmpty(body)) {
-//            throw new IllegalArgumentException("Body to file is incorrect!");
-//        }
-//        try (FileChannel rwChannel = new RandomAccessFile(path, "rw").getChannel()) {
-//            rwChannel.force(true);
-//            byte[] buffer = body.getBytes();
-//            rwChannel.map(FileChannel.MapMode.READ_WRITE, 0, buffer.length).put(buffer);
-//        }
-//    }
-
 }
