@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,11 @@ import ua.test.wrapper.ProcessWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
+import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,6 +49,28 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
 
     @Value(value = "${fail.over.count}")
     private int failOverCount;
+
+    /**
+     * Check is alive server, which will be used to backup a data
+     *
+     * @return true is alive otherwise false
+     */
+    @Override
+    public boolean isAliveBackupServer() {
+        boolean isConnected = false;
+        try {
+            for (int i = 0; i < failOverCount; i++) {
+                if (isConnected) {
+                    break;
+                }
+                new URL(mainHost).openConnection().connect();
+                isConnected = true;
+            }
+        } catch (Exception exc) {
+            LOG.error("Cannot connect to the backup server {}", exc);
+        }
+        return isConnected;
+    }
 
     /**
      * This method used to get object from repository
@@ -108,16 +131,22 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
         return reports;
     }
 
+    /**
+     * This method used to save object
+     *
+     * @param processWrapper to save
+     * @throws RepositoryException if cannot save a object in repository
+     */
     @Override
     public void saveBackupObject(@Nonnull ProcessWrapper processWrapper) throws RepositoryException {
         try {
             LOG.info("File name to save {}", processWrapper.getBackupId());
-            try (FileChannel rwGzipChannel = new RandomAccessFile(StringUtils.concatString(TEMP_DIRECTORY_PATH,
+            try (FileChannel rwChannel = new RandomAccessFile(StringUtils.concatString(TEMP_DIRECTORY_PATH,
                     processWrapper.getBackupId(), ".json"), "rw").getChannel()) {
-                rwGzipChannel.force(true);
+                rwChannel.force(true);
                 try (InputStream is = new ByteArrayInputStream(objectMapper.writeValueAsBytes(processWrapper))) {
                     IOUtils.copy(new StringReader(IOUtils.toString(is, Charset.defaultCharset())),
-                            Channels.newOutputStream(rwGzipChannel), Charset.defaultCharset());
+                            Channels.newOutputStream(rwChannel), Charset.defaultCharset());
                 }
             }
         } catch (Exception exc) {
@@ -131,12 +160,13 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
      *
      * @return list of backupping reports
      */
-    private List<String> searchBackupReport() {
+    private List<String> searchBackupReport() throws IOException {
         LOG.info("Start search json files");
         List<String> paths = Lists.newArrayList();
-        for (File file : new File(TEMP_DIRECTORY_PATH).listFiles((FileFilter) new WildcardFileFilter("*.json"))) {
-            paths.add(file.getAbsolutePath());
-        }
+        File tempDirectoryFile = new File(TEMP_DIRECTORY_PATH);
+        String[] extensions = {"json"};
+        Collection<File> backyppedData = org.apache.commons.io.FileUtils.listFiles(tempDirectoryFile, extensions, false);
+        backyppedData.forEach(file -> paths.add(file.getAbsolutePath()));
         return paths;
     }
 

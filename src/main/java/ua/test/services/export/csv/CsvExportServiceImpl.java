@@ -49,7 +49,7 @@ public class CsvExportServiceImpl extends AbstractExportService implements Expor
      */
     @Nonnull
     @Override
-    public ByteArrayInputStream createReport(@Nonnull String backupId) throws BusinessLogicException {
+    public InputStream createReport(@Nonnull String backupId) throws BusinessLogicException {
         if (!isExistBackup(backupId)) {
             LOG.error("Cannot find backup with backup id {}", backupId);
             throw new IllegalArgumentException("Cannot find backup with backup id " + backupId);

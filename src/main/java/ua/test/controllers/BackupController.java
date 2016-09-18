@@ -8,8 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.test.exceptions.BusinessLogicException;
 import ua.test.exceptions.RestException;
-import ua.test.services.rest.RestServiceImpl;
+import ua.test.services.backup.file.FileBackupService;
 import ua.test.wrapper.ProcessWrapper;
 
 import java.util.Collections;
@@ -28,18 +29,28 @@ public class BackupController {
     private static final Logger LOG = LoggerFactory.getLogger(BackupController.class);
 
     @Autowired
-    private RestServiceImpl restService;
+    private FileBackupService fileBackupService;
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Map<String, String>> backupData() throws RestException {
         LOG.info("Start backup data...");
-        return ResponseEntity.ok().body(Collections.singletonMap("backupId", restService.backupFileData()));
+        try {
+            return ResponseEntity.ok().body(Collections.singletonMap("backupId", fileBackupService.backupData()));
+        } catch (BusinessLogicException exc) {
+            LOG.error("Error {}", exc);
+            throw new RestException(exc);
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<ProcessWrapper>> getBackupData() throws RestException {
-        LOG.info("Start backup data...");
-        return ResponseEntity.ok().body(restService.collectFileBackupResult());
+        LOG.info("Retrieve backupping data...");
+        try {
+            return ResponseEntity.ok().body(fileBackupService.collectBackupResult());
+        } catch (BusinessLogicException exc) {
+            LOG.error("Error {}", exc);
+            throw new RestException(exc);
+        }
     }
 
 }

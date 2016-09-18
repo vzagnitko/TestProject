@@ -217,7 +217,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${maven-war-plugin-version}</version>
                 <configuration>
-                    <warName>${project.build.finalName}</warName>
+                    <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
 
@@ -305,7 +305,7 @@
         <slf4j-version>1.7.21</slf4j-version>
         <log4j-version>1.2.17</log4j-version>
         <javax.servlet-version>3.1.0</javax.servlet-version>
-        <jackson-version>2.8.2</jackson-version>
+        <jackson-version>2.8.3</jackson-version>
         <jsr305-version>3.0.1</jsr305-version>
         <guava-version>19.0</guava-version>
         <commons-io-version>2.5</commons-io-version>

@@ -37,9 +37,16 @@ public interface Repository {
     /**
      * This method used to save object
      *
-     * @param processWrapper
+     * @param processWrapper to save
      * @throws RepositoryException if cannot save a object in repository
      */
     void saveBackupObject(@Nonnull ProcessWrapper processWrapper) throws RepositoryException;
+
+    /**
+     * Check is alive server, which will be used to backup a data
+     *
+     * @return true is alive otherwise false
+     */
+    boolean isAliveBackupServer();
 
 }

@@ -3,7 +3,6 @@
     <target name="copy-war">
         <echo>Start copy war</echo>
         <mkdir dir=".extract/webapps"/>
-        <!--<mkdir dir="webapps"/>-->
         <copy todir=".extract/webapps/" overwrite="true">
             <file file="TestProject.war"/>
         </copy>

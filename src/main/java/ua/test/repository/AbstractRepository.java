@@ -29,20 +29,6 @@ public abstract class AbstractRepository {
      * @param uri        to send request
      * @param httpMethod method which use to send request
      * @param entity     to POST request
-     * @param <T>        generic type of response type
-     * @return response entity
-     */
-    protected <T> ResponseEntity<T> sendRequest(@Nonnull String uri, @Nonnull HttpMethod httpMethod,
-                                                Object entity) {
-        return sendRequest(uri, httpMethod, entity, (Class<T>) Void.class);
-    }
-
-    /**
-     * Send request to external repository
-     *
-     * @param uri        to send request
-     * @param httpMethod method which use to send request
-     * @param entity     to POST request
      * @param objectType response type
      * @param <T>        generic type of response type
      * @return response entity
