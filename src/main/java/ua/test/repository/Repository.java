@@ -42,11 +42,4 @@ public interface Repository {
      */
     void saveBackupObject(@Nonnull ProcessWrapper processWrapper) throws RepositoryException;
 
-    /**
-     * Check is alive server, which will be used to backup a data
-     *
-     * @return true is alive otherwise false
-     */
-    boolean isAliveBackupServer();
-
 }

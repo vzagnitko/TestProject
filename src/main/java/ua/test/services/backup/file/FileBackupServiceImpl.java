@@ -45,9 +45,6 @@ public class FileBackupServiceImpl implements FileBackupService {
     @CacheEvict(value = "backupCache")
     public String backupData() throws BusinessLogicException {
         try {
-            if (!fileRepository.isAliveBackupServer()) {
-                throw new IllegalStateException("Cannot connect to the backup server, please check connection with it");
-            }
             String backupId = RandomStringUtils.randomAlphanumeric(ID_LONG);
             asyncEventBus.post(new FileBackupData(backupId));
             LOG.info("Success save json, file id {}", backupId);

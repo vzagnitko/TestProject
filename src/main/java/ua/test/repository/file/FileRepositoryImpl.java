@@ -22,7 +22,6 @@ import ua.test.wrapper.ProcessWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
-import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -49,28 +48,6 @@ public class FileRepositoryImpl extends AbstractRepository implements FileReposi
 
     @Value(value = "${fail.over.count}")
     private int failOverCount;
-
-    /**
-     * Check is alive server, which will be used to backup a data
-     *
-     * @return true is alive otherwise false
-     */
-    @Override
-    public boolean isAliveBackupServer() {
-        boolean isConnected = false;
-        try {
-            for (int i = 0; i < failOverCount; i++) {
-                if (isConnected) {
-                    break;
-                }
-                new URL(mainHost).openConnection().connect();
-                isConnected = true;
-            }
-        } catch (Exception exc) {
-            LOG.error("Cannot connect to the backup server {}", exc);
-        }
-        return isConnected;
-    }
 
     /**
      * This method used to get object from repository
